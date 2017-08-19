@@ -1,0 +1,16 @@
+[Unit]
+Description=PowerDNS
+After=docker.service postgres.service
+Requires=docker.service postgres.service
+
+[Service]
+ExecStart=/usr/bin/systemd-docker run --rm --name %n --volume /data/etc/pdns:/etc/pdns --link postgres.service:postgres --publish 53:53/tcp --publish 53:53/udp bsx303/pdns:latest
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target

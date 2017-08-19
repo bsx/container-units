@@ -1,0 +1,16 @@
+[Unit]
+Description=Prosody
+After=docker.service postgres.service
+Requires=docker.service postgres.service
+
+[Service]
+ExecStart=/usr/bin/systemd-docker run --rm --name %n --volume /data/etc/prosody:/etc/prosody --volume /var/log/prosody:/var/log/prosody --volume /data/letsencrypt:/etc/letsencrypt:ro --link postgres.service:postgres --publish 5222:5222 --publish 5269:5269 --publish 5000:5000 bsx303/prosody:latest
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target
