@@ -1,0 +1,22 @@
+[Unit]
+Description=Redis
+After=docker.service mailu-network.service
+Requires=docker.service mailu-network.service
+
+[Service]
+EnvironmentFile=/etc/mailu/mailu.conf
+ExecStart=/usr/bin/systemd-docker run --rm --name %n \
+    --network mailu --network-alias=redis \
+    --label com.docker.compose.service=redis \
+    --publish 127.0.0.1:6379:6379 \
+    --volume ${ROOT}/redis:/data \
+    redis:4.0.6-alpine
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=mailu.target

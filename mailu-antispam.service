@@ -1,0 +1,24 @@
+[Unit]
+Description=Mailu Antispam daemon
+After=docker.service mailu-network.service mailu-front.service
+Requires=docker.service mailu-network.service mailu-front.service
+
+[Service]
+EnvironmentFile=/etc/mailu/mailu.conf
+ExecStart=/usr/bin/systemd-docker run --rm --name %n \
+    --network mailu --network-alias=antispam \
+    --label com.docker.compose.service=antispam \
+    --env-file /etc/mailu/mailu.conf \
+    --volume ${ROOT}/filter:/var/lib/rspamd \
+    --volume ${ROOT}/dkim:/dkim \
+    --volume ${ROOT}/overrides/rspamd:/etc/rspamd/override.d \
+    mailu/postfix:${VERSION}
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=mailu.target

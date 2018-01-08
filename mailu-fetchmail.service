@@ -1,0 +1,22 @@
+[Unit]
+Description=Mailu fetchmail daemon
+After=docker.service mailu-network.service
+Requires=docker.service mailu-network.service
+
+[Service]
+EnvironmentFile=/etc/mailu/mailu.conf
+ExecStart=/usr/bin/systemd-docker run --rm --name %n \
+    --network mailu --network-alias=fetchmail \
+    --label com.docker.compose.service=fetchmail \
+    --env-file /etc/mailu/mailu.conf \
+    --volume ${ROOT}/data:/data \
+    mailu/fetchmail:${VERSION}
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=mailu.target

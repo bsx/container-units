@@ -1,0 +1,24 @@
+[Unit]
+Description=Mailu Admin UI
+After=docker.service mailu-network.service mailu-redis.service
+Requires=docker.service mailu-network.service mailu-redis.service
+
+[Service]
+EnvironmentFile=/etc/mailu/mailu.conf
+ExecStart=/usr/bin/systemd-docker run --rm --name %n \
+    --network mailu --network-alias=antispam \
+    --label com.docker.compose.service=antispam \
+    --env-file /etc/mailu/mailu.conf \
+    --volume ${ROOT}/data:/data \
+    --volume ${ROOT}/dkim:/dkim \
+    --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+    mailu/admin:${VERSION}
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=mailu.target

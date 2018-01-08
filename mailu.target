@@ -1,0 +1,7 @@
+[Unit]
+Description=Mailu dockerized mailsetup
+After=docker.service
+Requires=docker.service
+
+[Install]
+WantedBy=multi-user.target

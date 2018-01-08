@@ -1,0 +1,13 @@
+[Unit]
+Description=Service unit for mailu service network
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/bin/docker network create -d bridge mailu
+ExecStop=-/usr/bin/docker network rm mailu
+
+[Install]
+WantedBy=mailu.target

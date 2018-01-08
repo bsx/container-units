@@ -1,0 +1,22 @@
+[Unit]
+Description=Mailu WebMail UI
+After=docker.service mailu-network.service
+Requires=docker.service mailu-network.service
+
+[Service]
+EnvironmentFile=/etc/mailu/mailu.conf
+ExecStart=/usr/bin/systemd-docker run --rm --name %n \
+    --network mailu --network-alias=webmail \
+    --label com.docker.compose.service=webmail \
+    --env-file /etc/mailu/mailu.conf \
+    --volume ${ROOT}/webmail:/data \
+    mailu/${WEBMAIL}:${VERSION}
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=mailu.target
