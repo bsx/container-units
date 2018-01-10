@@ -1,12 +1,12 @@
 [Unit]
 Description=Mailu Antispam daemon
-After=docker.service mailu-network.service mailu-front.service
-Requires=docker.service mailu-network.service mailu-front.service
+After=docker.service service-network.service mailu-front.service
+Requires=docker.service service-network.service mailu-front.service
 
 [Service]
 EnvironmentFile=/etc/mailu/mailu.conf
 ExecStart=/usr/bin/systemd-docker run --rm --name %n \
-    --network mailu --network-alias=antispam \
+    --network services --network-alias=antispam \
     --label com.docker.compose.service=antispam \
     --env-file /etc/mailu/mailu.conf \
     --volume ${ROOT}/filter:/var/lib/rspamd \

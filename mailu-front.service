@@ -1,16 +1,14 @@
 [Unit]
 Description=Mailu Frontend
-After=docker.service mailu-network.service
-Requires=docker.service mailu-network.service
+After=docker.service service-network.service
+Requires=docker.service service-network.service
 
 [Service]
 EnvironmentFile=/etc/mailu/mailu.conf
 ExecStart=/usr/bin/systemd-docker run --rm --name %n \
-    --network mailu --network-alias=front \
+    --network services --network-alias=front \
     --label com.docker.compose.service=front \
     --env-file /etc/mailu/mailu.conf \
-    --publish ${BIND_ADDRESS4}:80:80 \
-    --publish ${BIND_ADDRESS4}:443:443 \
     --publish ${BIND_ADDRESS4}:110:110 \
     --publish ${BIND_ADDRESS4}:143:143 \
     --publish ${BIND_ADDRESS4}:993:993 \
@@ -18,8 +16,6 @@ ExecStart=/usr/bin/systemd-docker run --rm --name %n \
     --publish ${BIND_ADDRESS4}:25:25 \
     --publish ${BIND_ADDRESS4}:465:465 \
     --publish ${BIND_ADDRESS4}:587:587 \
-    --publish ${BIND_ADDRESS6}:80:80 \
-    --publish ${BIND_ADDRESS6}:443:443 \
     --publish ${BIND_ADDRESS6}:110:110 \
     --publish ${BIND_ADDRESS6}:143:143 \
     --publish ${BIND_ADDRESS6}:993:993 \

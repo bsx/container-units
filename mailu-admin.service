@@ -1,12 +1,12 @@
 [Unit]
 Description=Mailu Admin UI
-After=docker.service mailu-network.service mailu-redis.service
-Requires=docker.service mailu-network.service mailu-redis.service
+After=docker.service service-network.service mailu-redis.service
+Requires=docker.service service-network.service mailu-redis.service
 
 [Service]
 EnvironmentFile=/etc/mailu/mailu.conf
 ExecStart=/usr/bin/systemd-docker run --rm --name %n \
-    --network mailu --network-alias=antispam \
+    --network services --network-alias=antispam \
     --label com.docker.compose.service=antispam \
     --env-file /etc/mailu/mailu.conf \
     --volume ${ROOT}/data:/data \

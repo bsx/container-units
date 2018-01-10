@@ -1,18 +1,15 @@
 [Unit]
-Description=Prosody
+Description=Nextcloud
 After=docker.service postgres.service service-network.service
 Requires=docker.service postgres.service service-network.service
 
 [Service]
 ExecStart=/usr/bin/systemd-docker run --rm --name %n \
-    --network services --network-alias=prosody \
-    --publish 5222:5222 \
-    --publish 5269:5269 \
-    --publish 5000:5000 \
-    --volume /data/etc/prosody:/etc/prosody \
-    --volume /var/log/prosody:/var/log/prosody \
-    --volume /data/letsencrypt:/etc/letsencrypt:ro \
-    bsx303/prosody:latest
+    --network services --network-alias=nextcloud \
+    --volume /data/nextcloud:/var/www/html \
+    --volume /data/nextcloud/config:/var/www/html/config \
+    --volume /data/nextcloud/data:/var/www/html/data \
+    nextcloud:12.0.4-apache
 Restart=always
 RestartSec=10s
 Type=notify

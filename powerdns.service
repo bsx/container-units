@@ -1,10 +1,15 @@
 [Unit]
 Description=PowerDNS
-After=docker.service postgres.service
-Requires=docker.service postgres.service
+After=docker.service postgres.service service-network.service
+Requires=docker.service postgres.service service-network.service
 
 [Service]
-ExecStart=/usr/bin/systemd-docker run --rm --name %n --volume /data/etc/pdns:/etc/pdns --link postgres.service:postgres --publish 53:53/tcp --publish 53:53/udp bsx303/pdns:latest
+ExecStart=/usr/bin/systemd-docker run --rm --name %n \
+    --network services --network-alias=powerdns \
+    --publish 53:53/tcp \
+    --publish 53:53/udp \
+    --volume /data/etc/pdns:/etc/pdns \
+    bsx303/pdns:latest
 Restart=always
 RestartSec=10s
 Type=notify

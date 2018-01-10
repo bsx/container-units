@@ -1,12 +1,12 @@
 [Unit]
 Description=Mailu fetchmail daemon
-After=docker.service mailu-network.service
-Requires=docker.service mailu-network.service
+After=docker.service service-network.service
+Requires=docker.service service-network.service
 
 [Service]
 EnvironmentFile=/etc/mailu/mailu.conf
 ExecStart=/usr/bin/systemd-docker run --rm --name %n \
-    --network mailu --network-alias=fetchmail \
+    --network services --network-alias=fetchmail \
     --label com.docker.compose.service=fetchmail \
     --env-file /etc/mailu/mailu.conf \
     --volume ${ROOT}/data:/data \

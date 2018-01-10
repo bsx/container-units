@@ -6,8 +6,8 @@ Requires=docker.service
 [Service]
 Type=oneshot
 RemainAfterExit=true
-ExecStart=/usr/bin/docker network create -d bridge mailu
-ExecStop=-/usr/bin/docker network rm mailu
+ExecStart=/usr/bin/docker network create -d bridge services
+ExecStop=-/usr/bin/docker network rm services
 
 [Install]
 WantedBy=mailu.target

@@ -1,12 +1,12 @@
 [Unit]
 Description=Mailu WebDAV daemon
-After=docker.service mailu-network.service
-Requires=docker.service mailu-network.service
+After=docker.service service-network.service
+Requires=docker.service service-network.service
 
 [Service]
 EnvironmentFile=/etc/mailu/mailu.conf
 ExecStart=/usr/bin/systemd-docker run --rm --name %n \
-    --network mailu --network-alias=webdav \
+    --network services --network-alias=webdav \
     --label com.docker.compose.service=webdav \
     --env-file /etc/mailu/mailu.conf \
     --volume ${ROOT}/dav:/data \
