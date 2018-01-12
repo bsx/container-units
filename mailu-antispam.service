@@ -12,7 +12,7 @@ ExecStart=/usr/bin/systemd-docker run --rm --name %n \
     --volume ${ROOT}/filter:/var/lib/rspamd \
     --volume ${ROOT}/dkim:/dkim \
     --volume ${ROOT}/overrides/rspamd:/etc/rspamd/override.d \
-    mailu/postfix:${VERSION}
+    mailu/rspamd:${VERSION}
 Restart=always
 RestartSec=10s
 Type=notify
